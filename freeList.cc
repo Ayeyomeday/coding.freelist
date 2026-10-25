@@ -7,6 +7,20 @@ long int*
 freeList::reserve_space( int size ) {
   long int* loc = NULL;
 
+// If head is not empty, and the size stored in head[0] is big enough to store the new allocation:
+  if (head != NULL && head[0] >= size + 2) {
+
+    long int newListSize = head[0] - (size + 2);
+
+    loc = head + 2;
+    loc[-2] = size;
+    head = head + (size + 2);
+
+    head[0] = newListSize;
+    head[1] = 0;
+
+  }
+
   return loc;
 }
 
