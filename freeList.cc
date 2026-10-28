@@ -1,6 +1,9 @@
 #include "freeList.h"
 
 freeList::freeList( long int*inRAM, int size ) {
+    head = inRAM;
+    head[0] = size - 2;
+    head[1] = 0;
 }
 
 long int*
@@ -26,10 +29,32 @@ freeList::reserve_space( int size ) {
 
 void
 freeList::free_space( long int* location ) {
+
+  long int* block = location - 2;
+  block[1] = (long int)head;
+  head = block;
+
 }
 
 void
 freeList::coalesce_forward() {
+
+      long int* current = head;
+
+    while (current != NULL) {
+
+        long int* next = (long int*)current[1];
+
+        if (next != NULL && current + current[0] + 2 == next) {
+
+            current[0] = current[0] + next[0] + 2;
+
+            current[1] = next[1];
+
+        } else {
+            current = next;
+        }
+    }
 }
 
 // print() is given to you. It traverses the free list and prints out what is there.
